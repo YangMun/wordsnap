@@ -17,9 +17,7 @@
       "bundleIdentifier": "com.wordsnap.app",
       "buildNumber": "1",
       "infoPlist": {
-        "UIBackgroundModes": [
-          "remote-notification"
-        ]
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {
@@ -48,15 +46,6 @@
     "runtimeVersion": "exposdk:53.0.0",
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "e435ad92-a35b-4ef0-9854-12f9a1acaff6"
-      }
-    },
-    "owner": "yangmun"
+    }
   }
 }
