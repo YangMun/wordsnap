@@ -43,7 +43,7 @@
       ],
       "expo-font"
     ],
-    "runtimeVersion": "exposdk:53.0.0",
+    "runtimeVersion": "exposdk:54.0.0",
     "experiments": {
       "typedRoutes": true
     }
