@@ -1,0 +1,61 @@
+name: EAS Update (Expo Go 배포)
+
+on:
+  push:
+    branches:
+      - claude/english-learning-app-NWogo
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: EAS Update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup EAS CLI
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Initialize EAS project (if not yet linked)
+        run: |
+          if ! grep -q '"projectId"' app.json; then
+            echo "No projectId found — running eas init..."
+            eas init --non-interactive --force
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config user.name "github-actions[bot]"
+            git add app.json
+            git diff --cached --quiet || git commit -m "chore: link EAS project ID [skip ci]"
+            git push
+          else
+            echo "Project already initialized — skipping init."
+          fi
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Publish EAS Update
+        run: |
+          eas update \
+            --branch preview \
+            --message "WordSnap 테스트 배포 $(date '+%Y-%m-%d %H:%M')" \
+            --non-interactive \
+            --platform ios
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
